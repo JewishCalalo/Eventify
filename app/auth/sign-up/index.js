@@ -11,9 +11,9 @@ export default function SignUp() {
   const navigation=useNavigation();
   const router=useRouter();
 
-const [email,setEmail]=useState();
-const [password,setPassword]=useState();
-const [fullName,setFullName]=useState();
+  const [email,setEmail]=useState();
+  const [password,setPassword]=useState();
+  const [fullName,setFullName]=useState();
 
   useEffect(()=>{
     navigation.setOptions({
@@ -25,7 +25,7 @@ const [fullName,setFullName]=useState();
 
       if(!email&&!password&&!fullName)
       {
-        ToastAndroid.show('Incorrect details entered',ToastAndroid.LONG)
+        ToastAndroid.show('Incomplete details entered',ToastAndroid.LONG)
         return;
       }
 
