@@ -24,7 +24,7 @@ const onSignIn=()=>{
 
 if(!email&&!password)
 {
-    ToastAndroid.show('Incorrect details entered',ToastAndroid.LONG)
+    ToastAndroid.show('Incomplete details entered',ToastAndroid.LONG)
     return;
 }
 

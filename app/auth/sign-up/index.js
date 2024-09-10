@@ -25,7 +25,7 @@ export default function SignUp() {
 
       if(!email&&!password&&!fullName)
       {
-        ToastAndroid.show('Incomplete details entered',ToastAndroid.LONG)
+        ToastAndroid.show('Incomplete details entered',ToastAndroid.SHORT)
         return;
       }
 
