@@ -1,4 +1,5 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid, Image } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react'
 import { useNavigation, useRouter } from 'expo-router'
 import {Colors} from './../../../constants/Colors'
@@ -33,6 +34,7 @@ export default function SignUp() {
   .then((userCredential) => {
     // Signed up 
     const user = userCredential.user;
+    router.replace('/home')
     console.log=(user);
     // ...
   })
@@ -45,92 +47,174 @@ export default function SignUp() {
   }
 
   return (
-    <View style={{
-      padding: 20,
-      paddingTop:20,
-    }}>
-      <TouchableOpacity onPress={()=>router.back()}>
-      <Ionicons name="chevron-back" size={24} color="black" />
-      </TouchableOpacity>
-      <Text style={{
-        fontFamily:'montserrat-bold',
-        fontSize: 35,
-        marginTop: 10
-      }}>Register Now</Text>
+    <SafeAreaView>
 
-        <View style={{
-            marginTop:45
-        }}>
-            <Text style={{
-                fontFamily: 'montserrat-italic'
-            }}>  Full Name</Text>
-            <TextInput 
-            style={styles.input}
-            placeholder='Enter Your Name'
-            onChangeText={(value)=>setFullName(value)}>
-            </TextInput>
-        </View>
-        <View style={{
-            marginTop:25
-        }}>
-            <Text style={{
-                fontFamily: 'montserrat-italic'
-            }}>  Email</Text>
-            <TextInput 
-            style={styles.input}
-            placeholder='Enter Your Email'
-            onChangeText={(value)=>setEmail(value)}>
-            </TextInput>
-        </View>
-        <View style={{
-            marginTop:25
-        }}>
-            <Text style={{
-                fontFamily: 'montserrat-italic'
-            }}>  Password</Text>
-            <TextInput 
-            secureTextEntry={true}
-            style={styles.input}
-            placeholder='Enter Your Password'
-            onChangeText={(value)=>setPassword(value)}>
-            </TextInput>
-        </View>
-        <TouchableOpacity 
-          onPress={OnCreateAccount}
-          style={{
-            marginTop:40,
-            padding:20,
-            backgroundColor:Colors.lightorange,
-            borderRadius:15
-        }}>
-            <Text style={{
-                color:Colors.verydarkblue,
-                textAlign:'center'
-            }}>Register account</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-            onPress={()=>router.replace('auth/sign-in')}
-        style={{
-            marginTop:1,
-            padding:20,
-            borderRadius:15,
+        <View style={styles.container}>
 
-        }}>
-            <Text style={{
-                color:Colors.primary,
-                textAlign:'center',
-                fontFamily: 'montserrat-italic',
-            }}>Sign In</Text>
-        </TouchableOpacity>
-    </View>
+            <View style = {styles.topVectorContainer}>
+                <Image
+                    source = {require("../../../assets/images/registerTop.png")}
+                    style = {styles.topVector}
+                />
+            </View>
+
+            <TouchableOpacity onPress={()=>router.back()}>
+                <Ionicons name="chevron-back" size={24} color="black" />
+            </TouchableOpacity>
+
+            <View style={styles.headerContainer}>
+                <Text style={styles.header}>
+                    Register Now
+                </Text>
+            </View>
+
+            <View style={styles.inputContainer1}>
+                <Text style={styles.inputHeader}>
+                    Full Name
+                </Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder='Enter your name'
+                    onChangeText={(value)=>setFullName(value)}>
+                </TextInput>
+
+                <Text style={styles.inputHeader}>
+                    Email
+                </Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder='Enter your email'
+                    onChangeText={(value)=>setEmail(value)}>
+                </TextInput>
+
+                <Text style={styles.inputHeader}>
+                    Password
+                </Text>
+                <TextInput
+                    secureTextEntry={true}
+                    style={styles.input}
+                    placeholder='Enter your password'
+                    onChangeText={(value)=>setPassword(value)}>
+                </TextInput>
+            </View>
+
+
+            <View style={styles.buttonRegisterContainer}>
+                <TouchableOpacity onPress={OnCreateAccount} style={styles.buttonRegister}>
+                    <Text style={styles.buttonRegisterText}>
+                        Register
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>router.replace('auth/sign-in')} style={styles.buttonSignin}>
+                    <Text style={styles.buttonSigninText}>
+                        Sign In
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+
+            <View style = {styles.bottomVectorContainer}>
+                <Image
+                    source = {require("../../../assets/images/registerBottom.png")}
+                    style = {styles.bottomVector}
+                />
+            </View>
+
+        </View>
+
+    </SafeAreaView>
   )
 }
+
 const styles = StyleSheet.create({
-  input:{
-        
-    padding: 10,
-    borderWidth: 1,
-    borderRadius:15,
-    borderColor:Colors.verydarkblue
-}
+  container:{
+      backgroundColor: 'white',
+      height: '100%',
+  },
+
+  topVectorContainer:{
+      height: 20 ,
+  },
+
+  topVector:{
+      width: '100%',
+      height: 220 ,
+  },
+
+  bottomVectorContainer:{
+      height:'100%',
+      flex: 1,
+      flexDirection: 'column' ,
+      alignItems: 'flex-start',
+      justifyContent: 'flex-end',
+  },
+
+  bottomVector:{
+      position: 'absolute',
+  },
+
+  headerContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 0.4
+  },
+
+  header: {
+      fontFamily:'montserrat-bold',
+      fontSize: 35,
+      color: Colors.primary,
+  },
+
+  inputContainer1: {
+      justifyContent: 'center',
+      alignSelf: 'center',
+      padding: 20,
+      flex: 4,
+  },
+
+  inputHeader: {
+      fontFamily: 'montserrat',
+      fontSize: 20 ,
+      marginTop: 15,
+  },
+
+  input: {
+      marginTop: 10,
+      padding: 10 ,
+      borderWidth: 2 ,
+      borderColor: 'transparent' ,
+      backgroundColor: 'white' ,
+      width: 350 ,
+      height: 50 ,
+      borderRadius: 30 ,
+      elevation: 20 ,
+      alignSelf: 'center',
+  },
+
+  buttonRegisterContainer:{
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 0.5,
+      flexWrap:'nowrap',
+  },
+
+  buttonRegister: {
+      padding:15,
+      backgroundColor:'#65558f',
+      borderRadius: 30,
+      width: 320,
+      elevation: 20 ,
+  },
+
+  buttonRegisterText: {
+      color:'white',
+      textAlign:'center'
+  },
+
+  buttonSigninText: {
+      marginTop: 15,
+      color:Colors.primary,
+      textAlign:'center',
+      fontFamily: 'montserrat',
+  },
 })
