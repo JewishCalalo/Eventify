@@ -34,7 +34,11 @@ export default function SignUp() {
   .then((userCredential) => {
     // Signed up 
     const user = userCredential.user;
-    router.replace('/home')
+    router.replace('auth/sign-in')
+    {
+        ToastAndroid.show('Account Succsessfully Registered',ToastAndroid.SHORT)
+        return;
+      }
     console.log=(user);
     // ...
   })
