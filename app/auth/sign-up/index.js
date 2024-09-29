@@ -14,7 +14,6 @@ export default function SignUp() {
 
   const [email,setEmail]=useState();
   const [password,setPassword]=useState();
-  const [fullName,setFullName]=useState();
 
   useEffect(()=>{
     navigation.setOptions({
@@ -74,15 +73,6 @@ export default function SignUp() {
 
             <View style={styles.inputContainer1}>
                 <Text style={styles.inputHeader}>
-                    Full Name
-                </Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Enter your name'
-                    onChangeText={(value)=>setFullName(value)}>
-                </TextInput>
-
-                <Text style={styles.inputHeader}>
                     Email
                 </Text>
                 <TextInput
@@ -104,12 +94,18 @@ export default function SignUp() {
 
 
             <View style={styles.buttonRegisterContainer}>
-                <TouchableOpacity onPress={OnCreateAccount} style={styles.buttonRegister}>
+                <TouchableOpacity 
+                onPress={OnCreateAccount} 
+                style={styles.buttonRegister}
+                >
                     <Text style={styles.buttonRegisterText}>
                         Register
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>router.replace('auth/sign-in')} style={styles.buttonSignin}>
+                <TouchableOpacity 
+                onPress={()=>router.replace('auth/sign-in')} 
+                style={styles.buttonSigninText}
+                >
                     <Text style={styles.buttonSigninText}>
                         Sign In
                     </Text>
