@@ -62,31 +62,30 @@ return (
             </View>
 
 
-<View style={styles.inputContainer1}>
-<Text style={styles.placeholder}>Email</Text>
-<TextInput
-style={styles.input}
-onChangeText={(value)=>setEmail(value)}
-placeholder='Enter Your Email'>
-</TextInput>
-</View>
+        <View style={styles.inputContainer}>
+            <Text style={styles.inputHeader}>Email</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={(value)=>setEmail(value)}
+                placeholder='Enter Your Email'>
+            </TextInput>
+            <Text style={styles.placeholder}>Password</Text>
+            <TextInput
+                secureTextEntry={true}
+                style={styles.input}
+                onChangeText={(value)=>setPassword(value)}
+                placeholder='Enter Your Password'>
+            </TextInput>
+        </View>
 
-<View style={styles.inputContainer2}>
-<Text style={styles.placeholder}>Password</Text>
-<TextInput
-secureTextEntry={true}
-style={styles.input}
-onChangeText={(value)=>setPassword(value)}
-placeholder='Enter Your Password'></TextInput>
-</View>
 
-<TouchableOpacity onPress={onSignIn} style={styles.buttonSignIn}>
-<Text style={styles.buttonTextSignIn}>Sign In</Text>
-</TouchableOpacity>
+        <TouchableOpacity onPress={onSignIn} style={styles.buttonSignIn}>
+        <Text style={styles.buttonTextSignIn}>Sign In</Text>
+        </TouchableOpacity>
 
-<TouchableOpacity onPress={()=>router.replace('auth/sign-up')} style={styles.buttonSignUp}>
-<Text style={styles.buttonTextSignUp}>Register an account</Text>
-</TouchableOpacity>
+        <TouchableOpacity onPress={()=>router.replace('auth/sign-up')} style={styles.buttonSignUp}>
+        <Text style={styles.buttonTextSignUp}>Register an account</Text>
+        </TouchableOpacity>
 
 
 </View>
