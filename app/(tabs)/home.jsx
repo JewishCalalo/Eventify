@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Button, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { db } from '../../configs/FirebaseConfig';
+import { useNavigation, useRouter } from 'expo-router';
 import { collection, addDoc, getDocs, Timestamp } from "firebase/firestore";
 
 export default function HomeScreen() {
@@ -11,11 +13,14 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const querySnapshot = await getDocs(collection(db, 'events'));
-      const eventsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setEvents(eventsData);
+      try {
+        const querySnapshot = await getDocs(collection(db, 'events'));
+        const eventsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setEvents(eventsData);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
     };
-
     fetchEvents();
   }, []);
 
@@ -45,10 +50,13 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <TextInput 
-        placeholder="Event Title" 
-        value={newEvent.title} 
-        onChangeText={(text) => setNewEvent({ ...newEvent, title: text })} 
+    <TouchableOpacity onPress={()=>router.back()}>
+    <Ionicons name="chevron-back" size={24} color="black" />
+    </TouchableOpacity>
+      <TextInput
+        placeholder="Event Title"
+        value={newEvent.title}
+        onChangeText={(text) => setNewEvent({ ...newEvent, title: text })}
         style={styles.input}
       />
       <Button title="Show Date Picker" onPress={showDatePicker} />

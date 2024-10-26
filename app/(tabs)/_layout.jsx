@@ -9,10 +9,10 @@ const Stack = createStackNavigator();
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    'montserrat': require('/React Native/Eventify/assets/fonts/Montserrat-Regular.ttf'),
-    'montserrat-medium': require('/React Native/Eventify/assets/fonts/Montserrat-Medium.ttf'),
-    'montserrat-italic': require('/React Native/Eventify/assets/fonts/Montserrat-Italic.ttf'),
-    'montserrat-bold': require('/React Native/Eventify/assets/fonts/Montserrat-Bold.ttf')
+    'montserrat': require('/Eventify/assets/fonts/Montserrat-Regular.ttf'),
+    'montserrat-medium': require('/Eventify/assets/fonts/Montserrat-Medium.ttf'),
+    'montserrat-italic': require('/Eventify/assets/fonts/Montserrat-Italic.ttf'),
+    'montserrat-bold': require('/Eventify/assets/fonts/Montserrat-Bold.ttf')
   });
 
   if (!fontsLoaded) {
@@ -27,5 +27,3 @@ export default function RootLayout() {
     </Stack.Navigator>
   );
 }
-
-
