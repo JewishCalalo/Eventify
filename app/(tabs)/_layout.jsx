@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './home';
+import TabNavigator from './TabNavigator';
 import SignIn from '../auth/sign-in';
 import SignUp from '../auth/sign-up';
 import { useFonts } from 'expo-font';
@@ -9,21 +9,22 @@ const Stack = createStackNavigator();
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    'montserrat': require('/Eventify/assets/fonts/Montserrat-Regular.ttf'),
-    'montserrat-medium': require('/Eventify/assets/fonts/Montserrat-Medium.ttf'),
-    'montserrat-italic': require('/Eventify/assets/fonts/Montserrat-Italic.ttf'),
-    'montserrat-bold': require('/Eventify/assets/fonts/Montserrat-Bold.ttf')
+    'montserrat': require('/React Native/Eventify/assets/fonts/Montserrat-Regular.ttf'),
+    'montserrat-medium': require('/React Native/Eventify/assets/fonts/Montserrat-Medium.ttf'),
+    'montserrat-italic': require('/React Native/Eventify/assets/fonts/Montserrat-Italic.ttf'),
+    'montserrat-bold': require('/React Native/Eventify/assets/fonts/Montserrat-Bold.ttf')
   });
 
   if (!fontsLoaded) {
-    return null; // or a loading spinner
+    return null; 
   }
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-    </Stack.Navigator>
+    
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={TabNavigator} />
+        <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+      </Stack.Navigator>
   );
 }

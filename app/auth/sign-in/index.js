@@ -1,96 +1,92 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid, Image } from 'react-native'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import {Colors} from './../../../constants/Colors'
-import { useNavigation, useRouter } from 'expo-router'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid, Image } from 'react-native';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { Colors } from './../../../constants/Colors';
+import { useNavigation, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import {auth} from './../../../configs/FirebaseConfig'
-
+import { auth } from './../../../configs/FirebaseConfig';
 
 export default function SignIn() {
-    const navigation=useNavigation();
-    const router=useRouter();
+  const navigation = useNavigation();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const [email,setEmail]=useState();
-    const [password,setPassword]=useState();
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
-
-    useEffect(()=>{
-        navigation.setOptions({
-            headerShown:false
-        })
-    }, []);
-
-const onSignIn=()=>{
-
-if(!email&&!password)
-{
-    ToastAndroid.show('Invalid Email and Password',ToastAndroid.SHORT)
-    return;
-}
-
-    signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    router.replace('/home')
-    console.log(user);
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(errorMessage,error.code);
-    if(errorCode=='auth/invalid-credential')
-    {
-        ToastAndroid.show('Invalid Credential',ToastAndroid.LONG)
+  const onSignIn = () => {
+    if (!email || !password) {
+      ToastAndroid.show('Invalid Email and Password', ToastAndroid.SHORT);
+      return;
     }
-  });
-}
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        router.replace('/home');
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage, errorCode);
+        if (errorCode === 'auth/invalid-credential') {
+          ToastAndroid.show('Invalid Credential', ToastAndroid.LONG);
+        }
+      });
+  };
 
-return (
+  return (
     <SafeAreaView>
-        <View style={styles.container}>
-
-            <View style={styles.headerContainer}
-                <TouchableOpacity onPress={()=>router.back()}>
-                <Ionicons name="chevron-back" size={24} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.subheader}></Text>
-            </View>
-
-
-        <View style={styles.inputContainer}>
-            <Text style={styles.inputHeader}>Email</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={(value)=>setEmail(value)}
-                placeholder='Enter Your Email'>
-            </TextInput>
-            <Text style={styles.placeholder}>Password</Text>
-            <TextInput
-                secureTextEntry={true}
-                style={styles.input}
-                onChangeText={(value)=>setPassword(value)}
-                placeholder='Enter Your Password'>
-            </TextInput>
+      <View style={styles.container}>
+        <View style={styles.topVectorContainer}>
+          <Image
+            source={require("../../../assets/images/signin.png")}
+            style={styles.topVector}
+          />
         </View>
-
-
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="chevron-back" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.subheader}>
+          Welcome Back
+          to Eventify
+        </Text>
+        <View style={styles.inputContainer1}>
+          <Text style={styles.placeholder}>Email</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setEmail(value)}
+            placeholder='Enter Your Email'
+          />
+        </View>
+        <View style={styles.inputContainer2}>
+          <Text style={styles.placeholder}>Password</Text>
+          <TextInput
+            secureTextEntry={true}
+            style={styles.input}
+            onChangeText={(value) => setPassword(value)}
+            placeholder='Enter Your Password'
+          />
+        </View>
         <TouchableOpacity onPress={onSignIn} style={styles.buttonSignIn}>
-        <Text style={styles.buttonTextSignIn}>Sign In</Text>
+          <Text style={styles.buttonTextSignIn}>Sign In</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity onPress={()=>router.replace('auth/sign-up')} style={styles.buttonSignUp}>
-        <Text style={styles.buttonTextSignUp}>Register an account</Text>
+        <TouchableOpacity onPress={() => router.replace('auth/sign-up')} style={styles.buttonSignUp}>
+          <Text style={styles.buttonTextSignUp}>Register an account</Text>
         </TouchableOpacity>
-
-
-</View>
-</SafeAreaView>
-)
+        <View style={styles.bottomVectorContainer}>
+          <Image
+            source={require("../../../assets/images/signinBottom.png")}
+            style={styles.bottomVector}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 }
 
   const styles = StyleSheet.create({
