@@ -1,125 +1,144 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid, Image } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState } from 'react'
-import { useNavigation, useRouter } from 'expo-router'
-import {Colors} from './../../../constants/Colors'
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigation, useRouter } from 'expo-router';
+import { Colors } from './../../../constants/Colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import {auth} from './../../../configs/FirebaseConfig';
+import { doc, setDoc, collection } from 'firebase/firestore';
+import { auth, db } from './../../../configs/FirebaseConfig';
 
 export default function SignUp() {
-  const navigation=useNavigation();
-  const router=useRouter();
+  const navigation = useNavigation();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
 
-  const [email,setEmail]=useState();
-  const [password,setPassword]=useState();
-
-  useEffect(()=>{
+  useEffect(() => {
     navigation.setOptions({
       headerShown: false
-    })
+    });
   }, []);
 
-  const OnCreateAccount=()=>{
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
 
-      if(!email&&!password&&!fullName)
-      {
-        ToastAndroid.show('Incomplete details entered',ToastAndroid.SHORT)
-        return;
-      }
+  const validatePassword = (password) => {
+    const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Minimum 8 characters, at least one letter and one number
+    return re.test(password);
+  };
+
+  const OnCreateAccount = () => {
+    if (!email || !password || !fullName) {
+      ToastAndroid.show('Incomplete details entered', ToastAndroid.SHORT);
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      ToastAndroid.show('Invalid email format', ToastAndroid.SHORT);
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      ToastAndroid.show('Password must be at least 8 characters long and contain at least one letter and one number', ToastAndroid.SHORT);
+      return;
+    }
 
     createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    router.replace('/home')
-    console.log=(user);
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(errorMessage,error.code);
-    // ..
-  });
-  }
+      .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        // Save additional user data in Firestore
+        const userDocRef = doc(collection(db, 'users'), user.uid);
+        setDoc(userDocRef, { fullName: fullName, email: email });
+
+        router.replace('/home');
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage, errorCode);
+      });
+  };
 
   return (
     <SafeAreaView>
-
-        <View style={styles.container}>
-
-            <View style = {styles.topVectorContainer}>
-                <Image
-                    source = {require("../../../assets/images/registerTop.png")}
-                    style = {styles.topVector}
-                />
-            </View>
-
-            <TouchableOpacity onPress={()=>router.back()}>
-                <Ionicons name="chevron-back" size={24} color="black" />
-            </TouchableOpacity>
-
-            <View style={styles.headerContainer}>
-                <Text style={styles.header}>
-                    Register Now
-                </Text>
-            </View>
-
-            <View style={styles.inputContainer1}>
-                <Text style={styles.inputHeader}>
-                    Email
-                </Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Enter your email'
-                    onChangeText={(value)=>setEmail(value)}>
-                </TextInput>
-
-                <Text style={styles.inputHeader}>
-                    Password
-                </Text>
-                <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    placeholder='Enter your password'
-                    onChangeText={(value)=>setPassword(value)}>
-                </TextInput>
-            </View>
-
-
-            <View style={styles.buttonRegisterContainer}>
-                <TouchableOpacity 
-                onPress={OnCreateAccount} 
-                style={styles.buttonRegister}
-                >
-                    <Text style={styles.buttonRegisterText}>
-                        Register
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={()=>router.replace('auth/sign-in')} 
-                style={styles.buttonSigninText}
-                >
-                    <Text style={styles.buttonSigninText}>
-                        Sign In
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-
-            <View style = {styles.bottomVectorContainer}>
-                <Image
-                    source = {require("../../../assets/images/registerBottom.png")}
-                    style = {styles.bottomVector}
-                />
-            </View>
-
+      <View style={styles.container}>
+        <View style={styles.topVectorContainer}>
+          <Image
+            source={require("../../../assets/images/registerTop.png")}
+            style={styles.topVector}
+          />
         </View>
-
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="chevron-back" size={24} color="black" />
+        </TouchableOpacity>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>
+            Register Now
+          </Text>
+        </View>
+        <View style={styles.inputContainer1}>
+          <Text style={styles.inputHeader}>
+            Full Name
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder='Enter your full name'
+            onChangeText={(value) => setFullName(value)}
+          >
+          </TextInput>
+          <Text style={styles.inputHeader}>
+            Email
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder='Enter your email'
+            onChangeText={(value) => setEmail(value)}
+          >
+          </TextInput>
+          <Text style={styles.inputHeader}>
+            Password
+          </Text>
+          <TextInput
+            secureTextEntry={true}
+            style={styles.input}
+            placeholder='Enter your password'
+            onChangeText={(value) => setPassword(value)}
+          >
+          </TextInput>
+        </View>
+        <View style={styles.buttonRegisterContainer}>
+          <TouchableOpacity
+            onPress={OnCreateAccount}
+            style={styles.buttonRegister}
+          >
+            <Text style={styles.buttonRegisterText}>
+              Register
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.replace('auth/sign-in')}
+            style={styles.buttonSigninText}
+          >
+            <Text style={styles.buttonSigninText}>
+              Sign In
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.bottomVectorContainer}>
+          <Image
+            source={require("../../../assets/images/registerBottom.png")}
+            style={styles.bottomVector}
+          />
+        </View>
+      </View>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

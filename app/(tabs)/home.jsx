@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { db, auth } from '../../configs/FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, Timestamp, getDoc } from "firebase/firestore";
 import * as Notifications from 'expo-notifications';
 
 export default function HomeScreen() {
@@ -13,13 +13,20 @@ export default function HomeScreen() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: '', date: new Date() });
   const [editEventId, setEditEventId] = useState(null);
+  const [fullName, setFullName] = useState('');
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchEventsAndUserInfo = async () => {
       const user = auth.currentUser;
       if (user) {
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          setFullName(userDocSnap.data().fullName);
+          console.log("Full Name fetched:", userDocSnap.data().fullName);  // Logging
+        }
         const userEventsCollection = collection(db, 'users', user.uid, 'events');
         const querySnapshot = await getDocs(userEventsCollection);
         const eventsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), date: doc.data().date.toDate() }));
@@ -27,7 +34,7 @@ export default function HomeScreen() {
       }
     };
 
-    fetchEvents();
+    fetchEventsAndUserInfo();
   }, []);
 
   useEffect(() => {
@@ -52,17 +59,21 @@ export default function HomeScreen() {
   };
 
   const scheduleNotification = async (date, title) => {
+    const triggerDate = new Date(date.getTime() - 60000);  // 60000 milliseconds = 1 minute
+    console.log('Scheduling notification for:', triggerDate);
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Upcoming Event",
-        body: `Your event "${title}" is happening soon!`,
+        body: `Your event "${title}" is happening in 1 minute!`,
       },
-      trigger: date,
+      trigger: triggerDate,
     });
+    console.log('Notification scheduled');
   };
 
   const showModal = () => {
     setModalVisible(true);
+    setDatePickerVisibility(true);
   };
 
   const hideModal = () => {
@@ -137,7 +148,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.eventActions}>
           <TouchableOpacity onPress={() => {
-            setNewEvent({ title: item.title, date: date });
+            setNewEvent({ title: item.title, date: new Date(item.date) });
             setEditEventId(item.id);
             setModalVisible(true);
             setDatePickerVisibility(true);
@@ -154,10 +165,22 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.welcomeMessage}>Welcome, {fullName}</Text>
+        <TouchableOpacity style={styles.addButton} onPress={() => {
+          setNewEvent({ title: '', date: new Date() });
+          setEditEventId(null);
+          showModal();
+          setDatePickerVisibility(true);
+        }}>
+          <Ionicons name="add-circle" size={48} color="blue" />
+        </TouchableOpacity>
+      </View>
       <Modal
         visible={isModalVisible}
         animationType="slide"
         transparent={true}
+        onRequestClose={hideModal}
       >
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
@@ -185,14 +208,6 @@ export default function HomeScreen() {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-      <TouchableOpacity style={styles.addButton} onPress={() => {
-        setNewEvent({ title: '', date: new Date() });
-        setEditEventId(null);
-        setModalVisible(true);
-        setDatePickerVisibility(true);
-      }}>
-        <Ionicons name="add-circle" size={48} color="blue" />
-      </TouchableOpacity>
       <FlatList
         data={events}
         renderItem={renderItem}
@@ -202,7 +217,6 @@ export default function HomeScreen() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -211,19 +225,22 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingBottom: 20,
+  },
+  welcomeMessage: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
   },
   addButton: {
-    alignSelf: 'center',
-    marginVertical: 20,
+    marginLeft: 'auto',
   },
   eventItem: {
     backgroundColor: '#f9c2ff',
@@ -300,4 +317,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
