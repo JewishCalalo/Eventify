@@ -25,7 +25,7 @@ export default function HomeScreen() {
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           setFullName(userDocSnap.data().fullName);
-          console.log("Full Name fetched:", userDocSnap.data().fullName);  // Logging
+          console.log("Full Name fetched:", userDocSnap.data().fullName);  
         }
         const userEventsCollection = collection(db, 'users', user.uid, 'events');
         const querySnapshot = await getDocs(userEventsCollection);
@@ -59,7 +59,7 @@ export default function HomeScreen() {
   };
 
   const scheduleNotification = async (date, title) => {
-    const triggerDate = new Date(date.getTime() - 60000);  // 60000 milliseconds = 1 minute
+    const triggerDate = new Date(date.getTime() - 60000);  // needs fixing, supposed to make a notification 1 min prior to event
     console.log('Scheduling notification for:', triggerDate);
     await Notifications.scheduleNotificationAsync({
       content: {
