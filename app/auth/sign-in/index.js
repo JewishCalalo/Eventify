@@ -1,9 +1,8 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ToastAndroid, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Colors } from './../../../constants/Colors';
 import { useNavigation, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from './../../../configs/FirebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
@@ -47,51 +46,55 @@ export default function SignIn() {
   };
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.topVectorContainer}>
-          <Image
-            source={require("../../../assets/images/signin.png")}
-            style={styles.topVector}
-          />
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.container}>
+          <View style={styles.topVectorContainer}>
+            <Image
+              source={require("../../../assets/images/signin.png")}
+              style={styles.topVector}
+            />
+          </View>
+          <Text style={styles.subheader}>
+            Welcome Back
+            to Eventify
+          </Text>
+          <View style={styles.inputContainer1}>
+            <Text style={styles.placeholder}>Email</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setEmail(value)}
+              placeholder='Enter Your Email'
+              keyboardType='email-address'
+              autoCapitalize='none'
+            />
+          </View>
+          <View style={styles.inputContainer2}>
+            <Text style={styles.placeholder}>Password</Text>
+            <TextInput
+              secureTextEntry={true}
+              style={styles.input}
+              onChangeText={(value) => setPassword(value)}
+              placeholder='Enter Your Password'
+            />
+          </View>
+          <TouchableOpacity onPress={onSignIn} style={styles.buttonSignIn}>
+            <Text style={styles.buttonTextSignIn}>Sign In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.replace('auth/sign-up')} style={styles.buttonSignUp}>
+            <Text style={styles.buttonTextSignUp}>Register an account</Text>
+          </TouchableOpacity>
+          <View style={styles.bottomVectorContainer}>
+            <Image
+              source={require("../../../assets/images/signinBottom.png")}
+              style={styles.bottomVector}
+            />
+          </View>
         </View>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.subheader}>
-          Welcome Back
-          to Eventify
-        </Text>
-        <View style={styles.inputContainer1}>
-          <Text style={styles.placeholder}>Email</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(value) => setEmail(value)}
-            placeholder='Enter Your Email'
-          />
-        </View>
-        <View style={styles.inputContainer2}>
-          <Text style={styles.placeholder}>Password</Text>
-          <TextInput
-            secureTextEntry={true}
-            style={styles.input}
-            onChangeText={(value) => setPassword(value)}
-            placeholder='Enter Your Password'
-          />
-        </View>
-        <TouchableOpacity onPress={onSignIn} style={styles.buttonSignIn}>
-          <Text style={styles.buttonTextSignIn}>Sign In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.replace('auth/sign-up')} style={styles.buttonSignUp}>
-          <Text style={styles.buttonTextSignUp}>Register an account</Text>
-        </TouchableOpacity>
-        <View style={styles.bottomVectorContainer}>
-          <Image
-            source={require("../../../assets/images/signinBottom.png")}
-            style={styles.bottomVector}
-          />
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -115,7 +118,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   subheader: {
-    fontFamily: 'montserrat',
     padding: 5,
     marginTop: 60,
     fontSize: 40,
@@ -141,7 +143,6 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   placeholder: {
-    fontFamily: 'montserrat',
     fontSize: 20,
     marginBottom: 10,
   },
@@ -166,6 +167,5 @@ const styles = StyleSheet.create({
   buttonTextSignUp: {
     color: Colors.primary,
     textAlign: 'center',
-    fontFamily: 'montserrat',
   }
 });

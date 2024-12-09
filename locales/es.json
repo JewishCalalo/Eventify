@@ -1,0 +1,32 @@
+{
+    "welcome": "Bienvenido",
+    "onThisDay": "En Este Día",
+    "myEvents": "Mis Eventos",
+    "friends": "Amigos",
+    "concludedEvents": "Eventos Concluidos",
+    "teamEventify": "Equipo Eventify",
+    "changePassword": "Cambiar Contraseña",
+    "applyChanges": "Aplicar Cambios",
+    "resetToDefault": "Restablecer a Predeterminado",
+    "home": "Inicio",
+    "calendar": "Calendario",
+    "add": "Añadir",
+    "notifications": "Notificaciones",
+    "profile": "Perfil",
+    "settings": "Configuraciones",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "sign_up": "Registrarse",
+    "forgot_password": "Olvidó su contraseña",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "update": "Actualizar",
+    "confirm": "Confirmar",
+    "search": "Buscar",
+    "language": "Idioma",
+    "theme": "Tema"
+  }
+  
+  

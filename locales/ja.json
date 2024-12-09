@@ -1,0 +1,22 @@
+{
+    "home": "ホーム",
+    "calendar": "カレンダー",
+    "add": "追加",
+    "notifications": "通知",
+    "profile": "プロフィール",
+    "settings": "設定",
+    "logout": "ログアウト",
+    "login": "ログイン",
+    "sign_up": "サインアップ",
+    "forgot_password": "パスワードを忘れました",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "update": "更新",
+    "confirm": "確認",
+    "search": "検索",
+    "language": "言語",
+    "theme": "テーマ"
+  }
+  

@@ -20,7 +20,6 @@ export default function Login() {
       <View style={styles.container}>
         <Text style={{
             fontSize: 28,
-            fontFamily:'montserrat-bold',
             textAlign:'center',
             color:Colors.verydarkblue
         }}>Group 6</Text>
@@ -29,7 +28,6 @@ export default function Login() {
         >
             <Text style={{
                 fontSize: 20,
-                fontFamily:'montserrat-italic',
                 textAlign:'center',
                 color:Colors.white
             }}>Login or Signup</Text>

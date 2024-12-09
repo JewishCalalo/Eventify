@@ -1,0 +1,22 @@
+{
+    "home": "홈",
+    "calendar": "달력",
+    "add": "추가",
+    "notifications": "알림",
+    "profile": "프로필",
+    "settings": "설정",
+    "logout": "로그아웃",
+    "login": "로그인",
+    "sign_up": "가입하기",
+    "forgot_password": "비밀번호를 잊으셨나요",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "update": "업데이트",
+    "confirm": "확인",
+    "search": "검색",
+    "language": "언어",
+    "theme": "테마"
+  }
+  
